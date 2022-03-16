@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="wrapper">
-      <CategoryFilter />
+      <CategoryFilter :filterName="'categories'" />
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="category-widget" v-click-outside="toggleOffDropdown">
     <input
       class="category-widget__input input"
-      placeholder="Category"
+      :placeholder="filterName"
       @focus="isShowDropDown = true"
     />
 
@@ -27,6 +27,7 @@
               type="checkbox"
               :id="category.id"
               :value="category"
+              placeholder="Поиск"
               v-model="chosedCategories"
             /><label class="list__label" :for="category.id">{{
               category.title
@@ -60,6 +61,13 @@ export default {
       chosedCategories: [],
     };
   },
+  props: {
+    filterName: {
+      type: String,
+      required: true,
+      default: "categories",
+    },
+  },
   watch: {
     search: _.debounce(function () {
       this.categories = {};
@@ -80,7 +88,7 @@ export default {
         formdata.append("limit", "50");
         formdata.append("offset", "0");
         formdata.append("search", `${this.search}`);
-        const response = await getCategories(formdata);
+        const response = await getCategories(formdata, this.filterName);
         if (response.data?.message?.data) {
           this.categories = response.data.message.data;
         }
@@ -117,6 +125,9 @@ export default {
   padding: 6px 10px;
   border-radius: 4px;
   border: 1px solid rgba($color: #000000, $alpha: 0.3);
+  &::placeholder {
+    text-transform: capitalize;
+  }
 }
 
 .dropdown {
